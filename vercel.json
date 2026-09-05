@@ -1,6 +1,5 @@
 {
-  "installCommand": "npm --prefix frontend ci && uv venv .vercel/python/.venv && uv pip install --python .vercel/python/.venv/bin/python -r requirements.txt",
-  "buildCommand": "npm --prefix frontend run build",
+  "buildCommand": "npm --prefix frontend ci && npm --prefix frontend run build",
   "outputDirectory": "frontend/out",
   "rewrites": [
     {
