@@ -2,6 +2,7 @@
 .env.example
 node_modules
 .next
+frontend/out/
 *.env
 *.env.local
 !backend/.env.example
