@@ -1,1 +1,9 @@
--r backend/requirements.txt
+fastapi
+uvicorn[standard]
+motor
+pydantic
+pydantic-settings
+PyJWT
+python-jose[cryptography]
+email-validator
+google-auth
