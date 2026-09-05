@@ -1,0 +1,14 @@
+.agents
+.env.example
+node_modules
+.next
+*.env
+*.env.local
+*.log
+__pycache__/
+*.py[cod]
+.pytest_cache/
+coverage/
+*.tsbuildinfo
+frontend/public/sw.js
+frontend/public/workbox-*.js
