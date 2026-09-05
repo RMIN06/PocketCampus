@@ -33,4 +33,9 @@ const withPWA = require("next-pwa")({
 
 module.exports = withPWA({
   reactStrictMode: true,
+  output: "export",
+  trailingSlash: true,
+  images: {
+    unoptimized: true,
+  },
 });

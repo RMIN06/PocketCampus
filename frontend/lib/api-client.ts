@@ -11,8 +11,8 @@ import type {
 } from "./types";
 import { getToken } from "./auth";
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
-const BASE_URL = `${API_URL}/api/v1`;
+const API_URL = process.env.NEXT_PUBLIC_API_URL || "";
+const BASE_URL = API_URL ? `${API_URL}/api/v1` : "/api/v1";
 
 class ApiError extends Error {
   status: number;

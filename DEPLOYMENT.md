@@ -1,5 +1,14 @@
 # PocketCampus deployment checklist
 
+## Single Vercel project
+
+1. Import the repository in Vercel with the repository root as the project root. Do not set the Root Directory to `frontend`.
+2. The included `vercel.json` installs the frontend dependencies, exports the Next.js application to `frontend/out`, and rewrites `/api/*` to the FastAPI function in `api/index.py`.
+3. Add these Production environment variables in Vercel: `MONGO_URI`, `MONGO_DB_NAME`, `JWT_SECRET`, `JWT_ALGORITHM`, `GOOGLE_CLIENT_ID`, `CORS_ORIGINS`, and `NEXT_PUBLIC_GOOGLE_CLIENT_ID`.
+4. Leave `NEXT_PUBLIC_API_URL` unset in Vercel. The frontend then calls the FastAPI function on the same deployment domain at `/api/v1`.
+5. Set `CORS_ORIGINS` to your exact Vercel production URL, such as `https://pocketcampus.vercel.app`. Add your custom domain too when one is connected.
+6. Deploy from `main`. Vercel uses Node.js for the frontend and Python dependencies from the root `requirements.txt` for the API.
+
 ## Local development
 
 1. Copy `backend/.env.example` to `backend/.env` and set `MONGO_URI`, a long random `JWT_SECRET`, and `GOOGLE_CLIENT_ID`.
