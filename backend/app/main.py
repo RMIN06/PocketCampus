@@ -1,19 +1,11 @@
 # app/main.py
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from contextlib import asynccontextmanager
-from app.database import init_indexes
 from app.routers import users, expenses, auth
 from app.config import cors_origins
 
 
-@asynccontextmanager
-async def lifespan(app: FastAPI):
-    await init_indexes()
-    yield
-
-
-app = FastAPI(title="PocketCampus API", version="0.2.0", lifespan=lifespan)
+app = FastAPI(title="PocketCampus API", version="0.2.0")
 
 
 app.add_middleware(
