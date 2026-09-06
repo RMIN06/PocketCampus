@@ -11,8 +11,10 @@ import { Avatar } from "@/components/ui/Avatar";
 import { Button } from "@/components/ui/Button";
 import { formatCurrency, getCurrentMonth, formatMonthLabel } from "@/lib/format";
 import type { UserPublic, ExpenseSummary } from "@/lib/types";
+import { useExpenseSheet } from "@/components/layout/ExpenseSheetProvider";
 
 export default function ProfilePage() {
+  const { refreshKey } = useExpenseSheet();
   const router = useRouter();
   const [user, setUser] = useState<UserPublic | null>(null);
   const [summary, setSummary] = useState<ExpenseSummary | null>(null);
@@ -38,7 +40,7 @@ export default function ProfilePage() {
     };
 
     load();
-  }, []);
+  }, [refreshKey]);
 
   const handleSignOut = () => {
     clearAuth();

@@ -80,7 +80,8 @@ export default function LoginPage() {
       {CLIENT_ID && (
         <Script
           src="https://accounts.google.com/gsi/client"
-          onLoad={initGoogleButton}
+          onReady={initGoogleButton}
+          onError={() => setError("Google Sign-In could not load. Check your connection and reload this page.")}
           strategy="afterInteractive"
         />
       )}
@@ -106,10 +107,13 @@ export default function LoginPage() {
 
         {/* Google button / setup instructions */}
         <div className="mt-8 flex min-h-14 items-center justify-center">
-          {signingIn ? (
-            <div className="animate-spin rounded-full h-8 w-8 border-2 border-terracotta border-t-transparent" />
-          ) : CLIENT_ID ? (
-            <div ref={buttonRef} />
+          {CLIENT_ID ? (
+            <div>
+              <div ref={buttonRef} className={signingIn ? "hidden" : ""} />
+              {signingIn && (
+                <p role="status" className="text-sm text-ink-soft">Signing you in…</p>
+              )}
+            </div>
           ) : (
             <div className="w-full rounded-2xl border border-border-subtle bg-bg-surface p-4 text-left">
               <p className="text-sm font-semibold text-forest-dark">

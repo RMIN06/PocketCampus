@@ -7,15 +7,7 @@ const withPWA = require("next-pwa")({
   runtimeCaching: [
     {
       urlPattern: /^https?.*\/api\/.*/i,
-      handler: "NetworkFirst",
-      options: {
-        cacheName: "api-cache",
-        expiration: {
-          maxEntries: 100,
-          maxAgeSeconds: 60 * 60 * 24, // 24 hours
-        },
-        networkTimeoutSeconds: 10,
-      },
+      handler: "NetworkOnly",
     },
     {
       urlPattern: /^https?.*\.(png|jpg|jpeg|svg|gif|webp|ico)$/i,

@@ -1,0 +1,17 @@
+.git
+.venv
+.agents
+.env*
+backend/.env*
+frontend/.env*
+**/node_modules
+**/.next
+frontend/out
+**/__pycache__
+**/.pytest_cache
+**/*.log
+**/*.err
+**/*.tsbuildinfo
+ss1.png
+ss2.png
+backend/tests

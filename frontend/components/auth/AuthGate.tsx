@@ -11,11 +11,21 @@ export function AuthGate({ children }: { children: React.ReactNode }) {
   const [checked, setChecked] = useState(false);
 
   useEffect(() => {
-    if (!getToken()) {
-      router.replace("/login");
-    } else {
-      setChecked(true);
-    }
+    const checkSession = () => {
+      if (!getToken()) {
+        setChecked(false);
+        router.replace("/login");
+      } else {
+        setChecked(true);
+      }
+    };
+    checkSession();
+    window.addEventListener("pc-auth-changed", checkSession);
+    window.addEventListener("storage", checkSession);
+    return () => {
+      window.removeEventListener("pc-auth-changed", checkSession);
+      window.removeEventListener("storage", checkSession);
+    };
   }, [router]);
 
   if (!checked) {

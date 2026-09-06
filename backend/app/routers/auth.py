@@ -79,5 +79,5 @@ async def google_auth(payload: GoogleAuthRequest):
     return {
         "access_token": token,
         "token_type": "bearer",
-        "user": user.model_dump(by_alias=True, mode="json"),
+        "user": user.model_dump(mode="json"),
     }

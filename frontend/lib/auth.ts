@@ -30,4 +30,5 @@ export function setAuth(token: string, user: UserPublic): void {
 export function clearAuth(): void {
   localStorage.removeItem(TOKEN_KEY);
   localStorage.removeItem(USER_KEY);
+  window.dispatchEvent(new Event("pc-auth-changed"));
 }

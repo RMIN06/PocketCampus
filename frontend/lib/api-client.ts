@@ -11,7 +11,7 @@ import type {
 } from "./types";
 import { getToken } from "./auth";
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "";
+const API_URL = (process.env.NEXT_PUBLIC_API_URL || "").trim().replace(/\/+$/, "");
 const BASE_URL = API_URL ? `${API_URL}/api/v1` : "/api/v1";
 
 class ApiError extends Error {
@@ -39,6 +39,7 @@ async function request<T>(
 
   const response = await fetch(`${BASE_URL}${path}`, {
     ...options,
+    cache: "no-store",
     headers,
   });
 

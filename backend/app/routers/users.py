@@ -10,7 +10,7 @@ from bson import ObjectId
 router = APIRouter(prefix="/api/v1/users", tags=["users"])
 
 
-@router.get("/me", response_model=UserPublic)
+@router.get("/me", response_model=UserPublic, response_model_by_alias=False)
 async def get_current_user_profile(current_user_id: str = Depends(get_current_user)):
     """Get the signed-in user's profile."""
     doc = await users_collection.find_one({"_id": ObjectId(current_user_id)})

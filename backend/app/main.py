@@ -23,5 +23,6 @@ app.include_router(expenses.router)
 
 
 @app.get("/health")
+@app.get("/api/health")
 async def health_check():
     return {"status": "ok"}

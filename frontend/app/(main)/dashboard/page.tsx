@@ -3,20 +3,12 @@
 // terracotta accent bar — live data, no demo values.
 "use client";
 
-import { useState } from "react";
 import { MonthlyLedgerView } from "@/components/ledger/MonthlyLedgerView";
-import { ExpenseForm } from "@/components/expenses/ExpenseForm";
 import { useExpenseSheet } from "@/components/layout/ExpenseSheetProvider";
 import { Reveal } from "@/components/motion";
 
 export default function DashboardPage() {
-  const { isOpen: expenseSheetOpen, close: closeExpenseSheet } = useExpenseSheet();
-  const [refreshKey, setRefreshKey] = useState(0);
-
-  const handleExpenseCreated = () => {
-    closeExpenseSheet();
-    setRefreshKey((k) => k + 1); // re-fetch the ledger
-  };
+  const { refreshKey } = useExpenseSheet();
 
   return (
     <div className="flex min-h-screen flex-col">
@@ -43,13 +35,6 @@ export default function DashboardPage() {
       {/* ── Monthly ledger ────────────────────────────────────────── */}
       <MonthlyLedgerView refreshKey={refreshKey} />
 
-      {/* Add Expense Sheet */}
-      {expenseSheetOpen && (
-        <ExpenseForm
-          onSuccess={handleExpenseCreated}
-          onClose={closeExpenseSheet}
-        />
-      )}
     </div>
   );
 }

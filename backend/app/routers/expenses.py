@@ -12,13 +12,13 @@ from typing import Optional, List
 router = APIRouter(prefix="/api/v1/expenses", tags=["expenses"])
 
 
-@router.post("", response_model=ExpensePublic, status_code=201)
+@router.post("", response_model=ExpensePublic, response_model_by_alias=False, status_code=201)
 async def add_expense(payload: ExpenseCreate, current_user_id: str = Depends(get_current_user)):
     """Create a personal expense (owned by the authenticated user)."""
     return await create_expense(payload, current_user_id)
 
 
-@router.get("", response_model=List[ExpensePublic])
+@router.get("", response_model=List[ExpensePublic], response_model_by_alias=False)
 async def list_expenses(
     month: Optional[str] = Query(None, description="Month filter in YYYY-MM format"),
     current_user_id: str = Depends(get_current_user),
@@ -36,7 +36,7 @@ async def expense_summary(
     return await summarize_month(current_user_id, month)
 
 
-@router.patch("/{expense_id}", response_model=ExpensePublic)
+@router.patch("/{expense_id}", response_model=ExpensePublic, response_model_by_alias=False)
 async def edit_expense(
     expense_id: str,
     updates: ExpenseUpdate,

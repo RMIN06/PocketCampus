@@ -7,8 +7,10 @@ import { formatRelativeDate, formatCurrency, formatFullDate } from "@/lib/format
 import { FillPanel, Reveal, RevealList, RevealItem } from "@/components/motion";
 import { expensesApi, ApiError } from "@/lib/api-client";
 import type { ExpensePublic } from "@/lib/types";
+import { useExpenseSheet } from "@/components/layout/ExpenseSheetProvider";
 
 export default function ActivityPage() {
+  const { refreshKey } = useExpenseSheet();
   const [expenses, setExpenses] = useState<ExpensePublic[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -28,7 +30,7 @@ export default function ActivityPage() {
     };
 
     fetchActivity();
-  }, []);
+  }, [refreshKey]);
 
   const totalAll = expenses.reduce((sum, e) => sum + e.amount, 0);
   const thisWeek = expenses.filter((e) => {

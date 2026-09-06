@@ -6,6 +6,7 @@ pydantic-settings
 PyJWT
 python-jose[cryptography]
 email-validator
-google-auth
+google-auth[requests]
 pytest
+httpx
 
