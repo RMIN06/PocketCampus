@@ -16,7 +16,6 @@ __pycache__/
 .pytest_cache/
 coverage/
 *.tsbuildinfo
-frontend/public/sw.js
 frontend/public/workbox-*.js
 
 .vercel
