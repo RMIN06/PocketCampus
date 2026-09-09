@@ -9,6 +9,8 @@ import type {
   ExpenseSummary,
   UserPublic,
   MonthlyBudget,
+  PlaceResult,
+  LatLng,
 } from "./types";
 import { getToken } from "./auth";
 
@@ -115,6 +117,12 @@ export const expensesApi = {
 };
 
 export { ApiError };
+
+export const placesApi = {
+  nearby: (position: LatLng, signal?: AbortSignal) => request<PlaceResult[]>("/places/nearby", {
+    method: "POST", body: JSON.stringify(position), signal,
+  }),
+};
 
 export const budgetsApi = {
   get: (month: string) => request<MonthlyBudget>(`/budgets/${month}`),

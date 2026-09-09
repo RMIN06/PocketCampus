@@ -4,7 +4,7 @@
 // Map data (c) OpenStreetMap contributors.
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { LatLng, PlaceResult } from "@/lib/types";
 import "leaflet/dist/leaflet.css";
 
@@ -17,6 +17,7 @@ interface MapViewProps {
 }
 
 export function MapView({ center, userPosition, places, selectedId, onSelect }: MapViewProps) {
+  const [ready, setReady] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const mapRef = useRef<any>(null);
@@ -48,6 +49,7 @@ export function MapView({ center, userPosition, places, selectedId, onSelect }: 
       }).addTo(mapRef.current);
 
       markersRef.current = L.layerGroup().addTo(mapRef.current);
+      setReady(true);
     })();
 
     return () => {
@@ -81,7 +83,7 @@ export function MapView({ center, userPosition, places, selectedId, onSelect }: 
     } else {
       userMarkerRef.current.setLatLng([userPosition.lat, userPosition.lon]);
     }
-  }, [userPosition]);
+  }, [userPosition, ready]);
 
   // Re-render place markers
   useEffect(() => {
@@ -109,12 +111,14 @@ export function MapView({ center, userPosition, places, selectedId, onSelect }: 
         iconAnchor: [isSelected ? 15 : 12, isSelected ? 30 : 24],
       });
 
+      const label = document.createElement("span");
+      label.textContent = place.name;
       L.marker([place.lat, place.lon], { icon })
         .addTo(markersRef.current)
-        .bindTooltip(place.name)
+        .bindTooltip(label)
         .on("click", () => onSelect(place.id));
     }
-  }, [places, selectedId, onSelect]);
+  }, [places, selectedId, onSelect, ready]);
 
   // Pan to a selected place
   useEffect(() => {
@@ -123,7 +127,7 @@ export function MapView({ center, userPosition, places, selectedId, onSelect }: 
     if (place) {
       mapRef.current.flyTo([place.lat, place.lon], 16, { duration: 0.6 });
     }
-  }, [selectedId, places]);
+  }, [selectedId, places, ready]);
 
   return (
     <div

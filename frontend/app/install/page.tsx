@@ -25,7 +25,7 @@ export default function InstallPage() {
     try { await prompt.prompt(); await prompt.userChoice; } finally {setPrompt(null);}
   }
   return <main className="mx-auto max-w-xl px-5 pb-12 pt-12">
-    <img src="/icons/icon-192.png" width={80} height={80} alt="" className="mb-6 rounded-3xl" />
+    <img src="/icons/icon-192-v2.png" width={80} height={80} alt="Pocket Campus logo" className="mb-6 rounded-3xl" />
     <p className="text-xs font-bold uppercase tracking-widest text-ink-soft">PocketCampus · Made for your phone</p>
     <h1 className="mt-3 text-4xl font-extrabold tracking-tight text-forest">Your pocket.<br />Your budget.</h1>
     <p className="mt-4 text-lg">Track expenses in rupees, watch your monthly budget, and add an expense with “Hey Pocket.”</p>

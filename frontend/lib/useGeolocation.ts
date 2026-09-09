@@ -49,9 +49,9 @@ export function useGeolocation(autoStart = true): GeolocationState & { refresh: 
         });
       },
       (err) => {
-        setState({
-          position: null,
-          accuracy: null,
+        setState((previous) => ({
+          position: previous.position,
+          accuracy: previous.accuracy,
           loading: false,
           error:
             err.code === err.PERMISSION_DENIED
@@ -59,9 +59,9 @@ export function useGeolocation(autoStart = true): GeolocationState & { refresh: 
               : err.code === err.POSITION_UNAVAILABLE
               ? "Location unavailable right now"
               : "Could not get your location — please try again",
-        });
+        }));
       },
-      { enableHighAccuracy: true, timeout: 15000, maximumAge: 30000 }
+      { enableHighAccuracy: false, timeout: 15000, maximumAge: 60000 }
     );
     watchIdRef.current = id;
   };

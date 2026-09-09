@@ -9,7 +9,7 @@ import { MapView } from "@/components/explore/MapView";
 import { useGeolocation } from "@/lib/useGeolocation";
 import { fetchNearbyPlaces, mapsDirectionsUrl } from "@/lib/places";
 import { formatDistance } from "@/lib/format";
-import { Reveal, RevealList, RevealItem } from "@/components/motion";
+import { Reveal } from "@/components/motion";
 import { Button } from "@/components/ui/Button";
 import type { PlaceKind, PlaceResult } from "@/lib/types";
 
@@ -22,28 +22,40 @@ export default function ExplorePage() {
   const [placesError, setPlacesError] = useState<string | null>(null);
   const [filter, setFilter] = useState<Filter>("all");
   const [selectedId, setSelectedId] = useState<string | null>(null);
+  const [retryKey, setRetryKey] = useState(0);
+  // Approximately 100m cells prevent GPS jitter from repeatedly cancelling searches.
+  const searchLat = position ? Math.round(position.lat * 1000) / 1000 : null;
+  const searchLon = position ? Math.round(position.lon * 1000) / 1000 : null;
+  const retry = () => { setRetryKey(key => key + 1); if (!position) refresh(); };
+  const mapsSearch = position
+    ? `https://www.google.com/maps/search/${encodeURIComponent(filter === "books" ? "bookshops" : filter === "food" ? "restaurants" : "shops")}/@${position.lat},${position.lon},15z`
+    : "https://www.google.com/maps/search/bookshops+and+restaurants+near+me/";
 
   // Search when we get a fix (or the user moves significantly)
   useEffect(() => {
-    if (!position) return;
+    if (searchLat === null || searchLon === null) return;
+    const controller = new AbortController();
     let cancelled = false;
     setPlacesLoading(true);
     setPlacesError(null);
-    fetchNearbyPlaces(position, ["food", "books"])
+    setPlaces([]);
+    setSelectedId(null);
+    fetchNearbyPlaces({lat: searchLat, lon: searchLon}, ["food", "books"], controller.signal)
       .then((results) => {
         if (!cancelled) setPlaces(results);
       })
-      .catch(() => {
+      .catch((error) => {
         if (!cancelled)
-          setPlacesError("Couldn't load nearby places - check your connection and retry.");
+          setPlacesError(error instanceof Error ? error.message : "Couldn't load nearby places. Please retry.");
       })
       .finally(() => {
         if (!cancelled) setPlacesLoading(false);
       });
     return () => {
       cancelled = true;
+      controller.abort();
     };
-  }, [position?.lat, position?.lon]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [searchLat, searchLon, retryKey]);
 
   const filtered = useMemo(
     () => (filter === "all" ? places : places.filter((p) => p.kind === filter)),
@@ -93,7 +105,7 @@ export default function ExplorePage() {
                 {accuracy ? ` (+/-${Math.round(accuracy)} m)` : ""}
               </p>
             </div>
-            <Button variant="ghost" size="sm" onClick={refresh}>
+            <Button variant="ghost" size="sm" onClick={() => {refresh(); retry();}} disabled={placesLoading}>
               Refresh
             </Button>
           </div>
@@ -138,6 +150,32 @@ export default function ExplorePage() {
           </Button>
         ))}
       </div>
+      <section className="px-4 py-4" aria-label="Nearby shops">
+        <div className="mb-3 flex items-center justify-between gap-3">
+          <h2 className="text-xl font-bold text-forest">Nearby places</h2>
+          {position && <span className="text-xs text-ink-soft">Within 2 km</span>}
+        </div>
+        {placesLoading && <p role="status" className="rounded-xl bg-bg-surface p-4 text-sm">Finding bookshops and eating spots…</p>}
+        {placesError && <div role="alert" className="rounded-xl bg-terracotta-tint p-4 text-sm text-terracotta-dark">
+          <p>{placesError}</p><Button size="sm" variant="secondary" className="mt-3" onClick={retry}>Retry search</Button>
+        </div>}
+        {!position && !locating && <p className="py-3 text-sm text-ink-soft">Allow location access to find shops around you, or use the map search below.</p>}
+        {position && !placesLoading && !placesError && filtered.length === 0 && <p className="rounded-xl bg-bg-surface p-4 text-sm text-ink-soft">No {filter === "books" ? "bookshops" : filter === "food" ? "eating spots" : "named places"} are listed here in OpenStreetMap. Coverage varies by area; try the map search below.</p>}
+        {!placesLoading && !placesError && filtered.length > 0 && <>
+          <p role="status" className="mb-3 text-sm text-ink-soft">{filtered.length} places · nearest first</p>
+          <ul className="space-y-3">
+            {filtered.map(place => <li key={place.id} className={`rounded-2xl border bg-bg-surface p-4 ${selectedId === place.id ? "border-forest" : "border-border-subtle"}`}>
+              <button type="button" onClick={() => setSelectedId(place.id)} aria-pressed={selectedId === place.id} className="min-h-11 w-full text-left focus-visible:outline-forest">
+                <span className="block font-bold text-forest">{place.name}</span>
+                <span className="text-sm text-ink-soft">{place.detail || (place.kind === "books" ? "Bookshop" : "Eating spot")} · {formatDistance(place.distanceMeters)} away</span>
+              </button>
+              <a href={mapsDirectionsUrl(place)} target="_blank" rel="noopener noreferrer" className="mt-2 inline-flex min-h-11 items-center text-sm font-semibold text-forest underline" aria-label={`Directions to ${place.name}`}>Get directions ↗</a>
+            </li>)}
+          </ul>
+        </>}
+        <a href={mapsSearch} target="_blank" rel="noopener noreferrer" className="mt-4 inline-flex min-h-11 items-center font-semibold text-forest underline">Search nearby in Google Maps ↗</a>
+        <p className="mt-2 text-xs text-ink-soft">Places © OpenStreetMap contributors. Location is used to search nearby places and is not saved to your account.</p>
+      </section>
     </div>
   );
 }

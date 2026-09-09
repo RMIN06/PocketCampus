@@ -16,6 +16,7 @@ export default function DashboardPage() {
       {/* ── Editorial header ──────────────────────────────────────── */}
       <header className="px-4 pb-2 pt-10">
         <Reveal>
+          <img src="/icons/icon-192-v2.png" alt="Pocket Campus logo" width={56} height={56} className="mb-4 rounded-xl" />
           <p className="text-xs font-bold uppercase tracking-[0.18em] text-ink-soft">
             Personal · All amounts in PKR
           </p>

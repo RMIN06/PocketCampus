@@ -1,7 +1,7 @@
 # app/main.py
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from app.routers import users, expenses, auth, budgets
+from app.routers import users, expenses, auth, budgets, places
 from app.config import cors_origins
 
 
@@ -21,6 +21,7 @@ app.include_router(auth.router)
 app.include_router(users.router)
 app.include_router(expenses.router)
 app.include_router(budgets.router)
+app.include_router(places.router)
 
 
 @app.get("/health")

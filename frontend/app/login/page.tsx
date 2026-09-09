@@ -88,6 +88,7 @@ export default function LoginPage() {
       )}
 
       <Reveal className="w-full max-w-sm text-center">
+        <img src="/icons/icon-192-v2.png" width={88} height={88} alt="Pocket Campus logo" className="mx-auto mb-5 rounded-2xl" />
         {/* Wordmark */}
         <p className="text-xs font-bold uppercase tracking-[0.18em] text-ink-soft">
           PocketCampus
