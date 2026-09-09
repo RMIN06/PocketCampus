@@ -6,6 +6,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import Script from "next/script";
+import Link from "next/link";
 import { authApi } from "@/lib/api-client";
 import { setAuth, getToken } from "@/lib/auth";
 import { Reveal } from "@/components/motion";
@@ -140,6 +141,7 @@ export default function LoginPage() {
           )}
         </div>
 
+        <Link href="/install/" className="mt-5 inline-flex min-h-11 items-center text-sm font-semibold text-forest underline">Install on Android or iPhone</Link>
         {error && (
           <p className="mt-4 rounded-xl bg-terracotta-tint p-3 text-sm text-terracotta-dark">
             {error}

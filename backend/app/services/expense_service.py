@@ -1,6 +1,6 @@
 # app/services/expense_service.py
 from typing import List, Optional
-from datetime import datetime, timezone
+from datetime import datetime, timezone, timedelta
 from app.database import expenses_collection
 from app.models.expense import (
     ExpenseCreate, ExpensePublic, ExpenseUpdate
@@ -10,16 +10,17 @@ from bson import ObjectId
 
 
 def month_range(month: Optional[str]) -> Optional[tuple]:
-    """Parse a YYYY-MM string into a (start, end) UTC datetime range."""
+    """Pakistan calendar month as a UTC query range, matching the PKR ledger."""
     if not month:
         return None
     try:
         year, month_num = map(int, month.split("-"))
-        start = datetime(year, month_num, 1, tzinfo=timezone.utc)
+        pakistan = timezone(timedelta(hours=5))
+        start = datetime(year, month_num, 1, tzinfo=pakistan).astimezone(timezone.utc)
         if month_num == 12:
-            end = datetime(year + 1, 1, 1, tzinfo=timezone.utc)
+            end = datetime(year + 1, 1, 1, tzinfo=pakistan).astimezone(timezone.utc)
         else:
-            end = datetime(year, month_num + 1, 1, tzinfo=timezone.utc)
+            end = datetime(year, month_num + 1, 1, tzinfo=pakistan).astimezone(timezone.utc)
         return start, end
     except ValueError:
         return None  # Invalid month format, ignore filter

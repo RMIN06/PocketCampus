@@ -30,7 +30,7 @@ export const ExpenseForm = ({ onSuccess, onClose }: ExpenseFormProps) => {
   const [error, setError] = useState<string | null>(null);
 
   const handleSubmit = async () => {
-    if (!description.trim() || !totalAmount || totalAmount <= 0) {
+    if (!description.trim() || !totalAmount || !Number.isFinite(totalAmount) || totalAmount <= 0) {
       setError("Please enter a description and an amount");
       return;
     }
@@ -71,8 +71,9 @@ export const ExpenseForm = ({ onSuccess, onClose }: ExpenseFormProps) => {
 
         {/* Description */}
         <div>
-          <label className="block text-sm font-medium text-ink-soft mb-2">Description</label>
+          <label htmlFor="expense-description" className="block text-sm font-medium text-ink-soft mb-2">Description</label>
           <input
+            id="expense-description"
             type="text"
             value={description}
             onChange={(e) => setDescription(e.target.value)}
@@ -85,14 +86,15 @@ export const ExpenseForm = ({ onSuccess, onClose }: ExpenseFormProps) => {
 
         {/* Amount (PKR) */}
         <div>
-          <label className="block text-sm font-medium text-ink-soft mb-2">Amount</label>
+          <label htmlFor="expense-amount" className="block text-sm font-medium text-ink-soft mb-2">Amount</label>
           <div className="relative">
             <span className="absolute left-4 top-1/2 -translate-y-1/2 text-ink-soft font-semibold">Rs</span>
             <input
+              id="expense-amount"
               type="number"
               inputMode="decimal"
-              step="1"
-              min="1"
+              step="0.01"
+              min="0.01"
               value={totalAmount ?? ""}
               onChange={(e) => setTotalAmount(e.target.value ? parseFloat(e.target.value) : null)}
               placeholder="0"

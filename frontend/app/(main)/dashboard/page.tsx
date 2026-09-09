@@ -6,6 +6,7 @@
 import { MonthlyLedgerView } from "@/components/ledger/MonthlyLedgerView";
 import { useExpenseSheet } from "@/components/layout/ExpenseSheetProvider";
 import { Reveal } from "@/components/motion";
+import { VoiceExpense } from "@/components/expenses/VoiceExpense";
 
 export default function DashboardPage() {
   const { refreshKey } = useExpenseSheet();
@@ -33,6 +34,7 @@ export default function DashboardPage() {
       </header>
 
       {/* ── Monthly ledger ────────────────────────────────────────── */}
+      <VoiceExpense />
       <MonthlyLedgerView refreshKey={refreshKey} />
 
     </div>

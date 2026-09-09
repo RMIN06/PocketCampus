@@ -1,7 +1,7 @@
 # app/main.py
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from app.routers import users, expenses, auth
+from app.routers import users, expenses, auth, budgets
 from app.config import cors_origins
 
 
@@ -12,7 +12,7 @@ app.add_middleware(
     CORSMiddleware,
     allow_origins=cors_origins(),
     allow_credentials=True,
-    allow_methods=["GET", "POST", "PATCH", "DELETE"],
+    allow_methods=["GET", "POST", "PUT", "PATCH", "DELETE"],
     allow_headers=["Authorization", "Content-Type"],
 )
 
@@ -20,6 +20,7 @@ app.add_middleware(
 app.include_router(auth.router)
 app.include_router(users.router)
 app.include_router(expenses.router)
+app.include_router(budgets.router)
 
 
 @app.get("/health")

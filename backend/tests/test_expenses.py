@@ -51,14 +51,14 @@ def test_all_categories_accepted():
 
 def test_month_range_valid():
     start, end = month_range("2026-09")
-    assert start == datetime(2026, 9, 1, tzinfo=timezone.utc)
-    assert end == datetime(2026, 10, 1, tzinfo=timezone.utc)
+    assert start == datetime(2026, 8, 31, 19, tzinfo=timezone.utc)
+    assert end == datetime(2026, 9, 30, 19, tzinfo=timezone.utc)
 
 
 def test_month_range_december_wraps_year():
     start, end = month_range("2026-12")
-    assert start == datetime(2026, 12, 1, tzinfo=timezone.utc)
-    assert end == datetime(2027, 1, 1, tzinfo=timezone.utc)
+    assert start == datetime(2026, 11, 30, 19, tzinfo=timezone.utc)
+    assert end == datetime(2026, 12, 31, 19, tzinfo=timezone.utc)
 
 
 def test_month_range_invalid_returns_none():

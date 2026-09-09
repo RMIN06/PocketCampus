@@ -21,3 +21,4 @@ frontend/public/workbox-*.js
 
 .vercel
 .env*.local
+frontend/public/version.json

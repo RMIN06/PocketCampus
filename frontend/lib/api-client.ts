@@ -8,6 +8,7 @@ import type {
   ExpensePublic,
   ExpenseSummary,
   UserPublic,
+  MonthlyBudget,
 } from "./types";
 import { getToken } from "./auth";
 
@@ -114,3 +115,10 @@ export const expensesApi = {
 };
 
 export { ApiError };
+
+export const budgetsApi = {
+  get: (month: string) => request<MonthlyBudget>(`/budgets/${month}`),
+  set: (month: string, amount: number) => request<MonthlyBudget>(`/budgets/${month}`, {
+    method: "PUT", body: JSON.stringify({ amount }),
+  }),
+};

@@ -7,6 +7,11 @@
       "includeFiles": "backend/**"
     }
   },
+  "headers": [
+    { "source": "/pocket-sw.js", "headers": [{ "key": "Cache-Control", "value": "no-cache, no-store, must-revalidate" }] },
+    { "source": "/version.json", "headers": [{ "key": "Cache-Control", "value": "no-cache, no-store, must-revalidate" }] },
+    { "source": "/api/(.*)", "headers": [{ "key": "Cache-Control", "value": "no-store" }] }
+  ],
   "rewrites": [
     {
       "source": "/api/(.*)",

@@ -82,8 +82,8 @@ export function formatFullDate(dateStr: string): string {
  * @returns e.g. "2026-09"
  */
 export function getCurrentMonth(): string {
-  const now = new Date();
-  return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}`;
+  const parts = new Intl.DateTimeFormat("en-US", {timeZone: "Asia/Karachi", year: "numeric", month: "2-digit"}).formatToParts(new Date());
+  return `${parts.find(p => p.type === "year")!.value}-${parts.find(p => p.type === "month")!.value}`;
 }
 
 /**

@@ -2,10 +2,11 @@
 // Root layout — light "Warm Craft" theme. Inter up to 800 for bold headings.
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
+import { MobileApp } from "@/components/layout/MobileApp";
 
 export const metadata: Metadata = {
   title: "PocketCampus",
-  description: "Split bills. Track expenses. Stay square with your roommates.",
+  description: "Track your expenses, manage monthly budgets and add expenses by voice in Pakistani Rupees.",
   manifest: "/manifest.json",
   appleWebApp: {
     capable: true,
@@ -18,8 +19,6 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
-  maximumScale: 1,
-  userScalable: false,
   viewportFit: "cover",
   themeColor: "#F5E6CC",
 };
@@ -37,7 +36,7 @@ export default function RootLayout({
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-title" content="PocketCampus" />
       </head>
-      <body className="min-h-screen bg-bg-base text-ink">{children}</body>
+      <body className="min-h-screen bg-bg-base text-ink"><MobileApp />{children}</body>
     </html>
   );
 }

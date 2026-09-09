@@ -1,8 +1,11 @@
 {
   "name": "PocketCampus",
   "short_name": "PocketCampus",
-  "description": "Split bills. Track expenses. Stay square with your roommates.",
-  "start_url": "/dashboard",
+  "description": "Personal expenses, monthly budgets and voice entry in Pakistani Rupees.",
+  "id": "/",
+  "scope": "/",
+  "start_url": "/dashboard/",
+  "lang": "en-PK",
   "display": "standalone",
   "background_color": "#F5E6CC",
   "theme_color": "#F5E6CC",

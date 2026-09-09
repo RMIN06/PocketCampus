@@ -48,6 +48,14 @@ export interface ExpenseSummary {
   by_category: Partial<Record<ExpenseCategory, number>>;
 }
 
+export interface MonthlyBudget {
+  month: string;
+  amount: number | null;
+  spent: number;
+  remaining: number | null;
+  alert: boolean;
+}
+
 // ── Nearby places (OpenStreetMap / Overpass) ────────────────────────────────
 export type PlaceKind = "food" | "books";
 

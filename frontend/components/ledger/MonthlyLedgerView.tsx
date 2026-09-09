@@ -8,9 +8,10 @@ import { getCurrentMonth } from "@/lib/format";
 import { ExpenseCard } from "@/components/expenses/ExpenseCard";
 import { LedgerSummaryHeader } from "./LedgerSummaryHeader";
 import { MonthSelector } from "./MonthSelector";
+import { MonthlyBudgetCard } from "./MonthlyBudgetCard";
 import { Reveal, RevealList, RevealItem } from "@/components/motion";
 import { expensesApi } from "@/lib/api-client";
-import type { ExpensePublic } from "@/lib/types";
+import type { ExpensePublic, ExpenseSummary } from "@/lib/types";
 
 function groupByDate(expenses: ExpensePublic[]): Map<string, ExpensePublic[]> {
   const grouped = new Map<string, ExpensePublic[]>();
@@ -34,30 +35,36 @@ export const MonthlyLedgerView = ({ refreshKey = 0 }: MonthlyLedgerViewProps) =>
   const [expenses, setExpenses] = useState<ExpensePublic[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [summary, setSummary] = useState<ExpenseSummary | null>(null);
 
   useEffect(() => {
+    let active = true;
     const fetchExpenses = async () => {
       setIsLoading(true);
       setError(null);
       try {
-        const data = await expensesApi.list(month);
+        const [data, totals] = await Promise.all([expensesApi.list(month), expensesApi.summary(month)]);
+        if (!active) return;
         setExpenses(data);
+        setSummary(totals);
       } catch (err) {
+        if (!active) return;
         setError(
           err instanceof Error && err.message
             ? err.message
             : "Failed to load your expenses"
         );
       } finally {
-        setIsLoading(false);
+        if (active) setIsLoading(false);
       }
     };
 
     fetchExpenses();
+    return () => { active = false; };
   }, [month, refreshKey]);
 
   const groupedExpenses = groupByDate(expenses);
-  const total = expenses.reduce((sum, e) => sum + e.amount, 0);
+  const total = summary?.total ?? 0;
 
   if (isLoading) {
     return (
@@ -83,13 +90,15 @@ export const MonthlyLedgerView = ({ refreshKey = 0 }: MonthlyLedgerViewProps) =>
     <div className="flex-1 pb-24">
       {/* Month selector */}
       <MonthSelector currentMonth={month} onMonthChange={setMonth} />
+      <MonthlyBudgetCard key={month} month={month} refreshKey={refreshKey} />
 
       {/* Summary header */}
       <Reveal className="px-4 pb-4">
-        <LedgerSummaryHeader total={total} count={expenses.length} />
+        <LedgerSummaryHeader total={total} count={summary?.count ?? 0} />
       </Reveal>
 
       {/* Expenses list */}
+      {(summary?.count ?? 0) > expenses.length && <p className="px-4 pb-3 text-sm text-ink-soft">Showing the latest {expenses.length} expenses. Totals and budget include all expenses this month.</p>}
       {groupedExpenses.size === 0 ? (
         <div className="flex flex-col items-center justify-center py-12 px-4 text-center">
           <svg className="w-16 h-16 text-ink-soft/50 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
