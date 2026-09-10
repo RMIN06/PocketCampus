@@ -17,6 +17,10 @@ __pycache__/
 coverage/
 *.tsbuildinfo
 frontend/public/workbox-*.js
+frontend/android/app/build/
+frontend/android/.gradle/
+frontend/ios/App/Pods/
+frontend/ios/App/App.xcworkspace/
 
 .vercel
 .env*.local

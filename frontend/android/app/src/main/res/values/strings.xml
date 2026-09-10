@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">PocketCampus</string>
+    <string name="title_activity_main">PocketCampus</string>
+    <string name="package_name">com.pocketcampus.app</string>
+    <string name="custom_url_scheme">com.pocketcampus.app</string>
+</resources>
