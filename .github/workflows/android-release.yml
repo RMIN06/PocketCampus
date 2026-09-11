@@ -11,6 +11,8 @@ permissions:
 jobs:
   release:
     runs-on: ubuntu-latest
+    env:
+      RELEASE_VERSION: ${{ github.ref_name }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -27,7 +29,8 @@ jobs:
         working-directory: frontend
       - run: npm run build:web && npx cap sync android
         working-directory: frontend
-      - run: chmod +x gradlew && ./gradlew assembleDebug --stacktrace --no-daemon -PversionCode=${{ github.run_number }} -PversionName=${GITHUB_REF_NAME#v}
+      - shell: bash
+        run: chmod +x gradlew && ./gradlew assembleDebug --stacktrace --no-daemon -PversionCode=${{ github.run_number }} -PversionName=${RELEASE_VERSION#v}
         working-directory: frontend/android
       - run: cp frontend/android/app/build/outputs/apk/debug/app-debug.apk frontend/android/app/build/outputs/apk/debug/pocketcampus-release.apk
       - uses: softprops/action-gh-release@v2
