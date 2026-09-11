@@ -10,8 +10,8 @@ class Settings(BaseSettings):
     JWT_EXPIRE_HOURS: int = 24 * 7
     # Google OAuth — the audience (client ID) that Google ID tokens must be issued for.
     # Leave empty while Google Sign-In is not configured.
-    GOOGLE_CLIENT_ID: str = ""
-    CORS_ORIGINS: str = "http://localhost:3000,http://localhost:3001,https://pocketcampus.app"
+    GOOGLE_CLIENT_ID: str = "678031996418-ad1uljs84rbub3tevums7ahdchufj1k3.apps.googleusercontent.com"
+    CORS_ORIGINS: str = "http://localhost:3000,http://localhost:3001,https://pocketcampus.app,https://pocket-campus-bice.vercel.app"
 
     class Config:
         env_file = ".env"

@@ -30,7 +30,9 @@ declare global {
   }
 }
 
-const CLIENT_ID = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID || "";
+// Google web client IDs are public by design. Keep a production fallback so
+// a missing Vercel env variable never exposes developer setup instructions.
+const CLIENT_ID = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID || "678031996418-ad1uljs84rbub3tevums7ahdchufj1k3.apps.googleusercontent.com";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -116,30 +118,7 @@ export default function LoginPage() {
                 <p role="status" className="text-sm text-ink-soft">Signing you in…</p>
               )}
             </div>
-          ) : (
-            <div className="w-full rounded-2xl border border-border-subtle bg-bg-surface p-4 text-left">
-              <p className="text-sm font-semibold text-forest-dark">
-                Google Sign-In setup needed
-              </p>
-              <ol className="mt-2 list-decimal space-y-1 pl-4 text-xs text-ink-soft">
-                <li>
-                  Create an OAuth 2.0 Client ID at{" "}
-                  <span className="font-medium">console.cloud.google.com → APIs &amp; Credentials</span>
-                </li>
-                <li>
-                  Add <code className="font-mono">http://localhost:3001</code> to
-                  &ldquo;Authorized JavaScript origins&rdquo;
-                </li>
-                <li>
-                  Put it in <code className="font-mono">frontend/.env.local</code> as{" "}
-                  <code className="font-mono">NEXT_PUBLIC_GOOGLE_CLIENT_ID</code> and in{" "}
-                  <code className="font-mono">backend/.env</code> as{" "}
-                  <code className="font-mono">GOOGLE_CLIENT_ID</code>
-                </li>
-                <li>Restart both servers</li>
-              </ol>
-            </div>
-          )}
+          ) : <p role="status" className="text-sm text-ink-soft">Google Sign-In is loading…</p>}
         </div>
 
         <Link href="/install/" className="mt-5 inline-flex min-h-11 items-center text-sm font-semibold text-forest underline">Install on Android or iPhone</Link>
