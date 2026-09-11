@@ -1,13 +1,10 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Capacitor } from "@capacitor/core";
-import { AppUpdater } from "@/lib/app-updater";
 
 export function MobileApp() {
   const [offline, setOffline] = useState(false);
   const [updated, setUpdated] = useState(false);
-  const [nativeUpdate, setNativeUpdate] = useState<{ tag: string; downloadUrl: string } | null>(null);
   useEffect(() => {
     let mounted = true;
     let version: string | undefined;
@@ -28,11 +25,6 @@ export function MobileApp() {
         version = data.version;
       } catch { /* Next foreground check retries. */ }
     };
-    if (Capacitor.isNativePlatform() && Capacitor.getPlatform() === "android") {
-      void AppUpdater.checkLatest().then((release) => {
-        if (release.updateAvailable && release.downloadUrl) setNativeUpdate(release);
-      }).catch(() => {});
-    }
     void check();
     const interval = setInterval(check, 60000);
     document.addEventListener("visibilitychange", check);
@@ -44,17 +36,6 @@ export function MobileApp() {
     </div>;
   }
 
-  if (nativeUpdate) {
-    return <div className="fixed inset-0 z-[100] flex items-end justify-center bg-forest/50 p-4 backdrop-blur-sm sm:items-center" role="presentation">
-      <section aria-labelledby="native-update-title" aria-modal="true" className="w-full max-w-md rounded-[2rem] border border-beige-border bg-beige-elevated p-6 shadow-2xl sm:p-8" role="dialog">
-        <p className="text-xs font-bold uppercase tracking-[0.18em] text-terracotta-dark">New Android build available</p>
-        <h2 id="native-update-title" className="mt-2 text-3xl font-extrabold tracking-tight text-forest">Update PocketCampus</h2>
-        <p className="mt-3 text-base leading-7 text-ink">Download the latest version from GitHub. Android will ask you to confirm the installation.</p>
-        <button className="mt-7 min-h-12 w-full rounded-2xl bg-terracotta px-5 py-3 font-bold text-white" onClick={() => { void AppUpdater.downloadLatest({ downloadUrl: nativeUpdate.downloadUrl }); setNativeUpdate(null); }}>Download update</button>
-        <button className="mt-3 min-h-11 w-full rounded-2xl px-5 py-3 text-sm font-bold text-ink-soft" onClick={() => setNativeUpdate(null)}>Later</button>
-      </section>
-    </div>;
-  }
 
   if (!updated) return null;
   return (
