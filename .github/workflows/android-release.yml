@@ -38,10 +38,10 @@ jobs:
           sed -i -E "s/^        versionCode .*/        versionCode ${GITHUB_RUN_NUMBER}/" app/build.gradle
           sed -i -E "s/^        versionName .*/        versionName \"${GITHUB_REF_NAME#v}\"/" app/build.gradle
           chmod +x gradlew
-          ./gradlew assembleDebug --stacktrace --no-daemon
+          ./gradlew assembleRelease --stacktrace --no-daemon
         working-directory: frontend/android
-      - run: cp frontend/android/app/build/outputs/apk/debug/app-debug.apk frontend/android/app/build/outputs/apk/debug/pocketcampus-release.apk
+      - run: cp frontend/android/app/build/outputs/apk/release/app-release.apk frontend/android/app/build/outputs/apk/release/pocketcampus-release.apk
       - uses: softprops/action-gh-release@v2
         with:
           generate_release_notes: true
-          files: frontend/android/app/build/outputs/apk/debug/pocketcampus-release.apk
+          files: frontend/android/app/build/outputs/apk/release/pocketcampus-release.apk
