@@ -27,7 +27,7 @@ jobs:
         working-directory: frontend
       - run: npm run build:web && npx cap sync android
         working-directory: frontend
-      - run: chmod +x gradlew && ./gradlew assembleDebug -PversionCode=${{ github.run_number }} -PversionName=${{ github.ref_name }}
+      - run: chmod +x gradlew && ./gradlew assembleDebug --stacktrace --no-daemon -PversionCode=${{ github.run_number }} -PversionName=${GITHUB_REF_NAME#v}
         working-directory: frontend/android
       - run: cp frontend/android/app/build/outputs/apk/debug/app-debug.apk frontend/android/app/build/outputs/apk/debug/pocketcampus-release.apk
       - uses: softprops/action-gh-release@v2
